@@ -1,0 +1,8 @@
+.idea
+**/__pycache__
+.DS_Store
+.env
+venv
+s3-data
+.dockerignore
+.vscode
