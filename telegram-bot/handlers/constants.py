@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 WELCOME_MESSAGE = """
 Привет 👋
@@ -10,10 +10,21 @@ WELCOME_MESSAGE = """
 
 HELP_MESSAGE = """
 Список моих команд
-- /user_add
-- /user_remove
-- /user_search
+- /employee_add - создать карточку сотрудника
+- /employee_update - обновить карточку сотрудника
+- /employee_delete - удалить карточку сотрудника
+- /employee_search - список команд поиска
 """
+
+
+class UserRoles(Enum):
+    USER = "user"
+    ADMIN = "admin"
+
+
+class UserRolesMessages(Enum):
+    CHANGED = "✅ Роль была успешно изменена!"
+    NOT_PERMITTED = "❌ У Вас недостаточно прав для использования этой команды!"
 
 
 class EmployeeAskDataMessages(Enum):
@@ -54,27 +65,39 @@ class SearchType(Enum):
     SURNAME = "surname"
     PROJECT = "project"
     JOB_TITLE = "job_title"
+    PATRONYMIC = "patronymic"
+    PERIOD_OF_TIME = "created"
 
 
 class SearchResultMessages(Enum):
     SEARCH_RESULT_NOT_FOUND = "[🔎] Поиск не дал никакого ответа ..."
 
 
-class UserSearchMessages(Enum):
-    USER_SEARCH_MESSAGE = """
-    🔎 Давайте найдем пользователя...
+class EmployeeSearchMessages(Enum):
+    SEARCH = """
+    🔎 Давайте найдем сотрудника...
     Выберете, по какой характеристике его искать ниже
     """
-    USER_SEARCH_WAITING = "Бот уже ищет сотрудника!"
-    USER_SEARCH_ASK = "[💬] Введите данные: "
-    LIST_SEARCH_COMMANDS = """
-    [🔎] Бот умеет искать по 4 характеристикам: имя, фамилия, проект, позиция на работе:
-    - /search_employee_name
-    - /search_employee_surname
-    - /search_employee_job_title
-    - /search_employee_project
-    """
+    LIST_EMPLOYEES = "[👥] Список сотрудников:"
+    LIST_JOB_TITLES = "[💼] Список должностей"
+    WAITING = "[...] Бот уже ищет сотрудника!"
+    ASK = "[💬] Введите данные: "
+    ASK_PERIOD_OF_TIME = "[💬] Введите период времени (С какого по какое) в формате: \nГод-Месяц-Число-Часы-Минуты " \
+                         "Год-Месяц-Число-Часы-Минуты \n" \
+                         "Пример: 2023-09-28-23-00 2023-09-28-23-00"
+    FAILED = "❌ Вы ввели данные в некорректном формате"
+    LIST_COMMANDS = "[🔎] Бот умеет искать по 6 характеристикам: имя, фамилия, отчество, проект, должность, " \
+                    "период прихода на работу"
 
+
+class EmployeeKeysData(Enum):
+    ID = '_id'
+    AVATAR_PATH = 'avatar_path'
+    CREATED = 'created'
+
+
+DELETE_VERIFIED_YES = 'да'
+NEW_LINE = "\n"
 
 API_TO_RESULT = {
     'name': '<b>Имя</b>: ',
@@ -83,8 +106,3 @@ API_TO_RESULT = {
     'job_title': '<b>Должность</b>: ',
     'project': '<b>Проект</b>: '
 }
-
-NEW_LINE = "\n"
-AVATAR_PATH = 'avatar_path'
-CREATED = 'created'
-ID = '_id'

@@ -1,3 +1,4 @@
 .idea
 docker-compose.yml
+dev-docker-compose.yml
 s3-data

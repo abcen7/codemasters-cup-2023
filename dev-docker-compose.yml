@@ -1,23 +1,12 @@
 version: '3.8'
 
-services:
-  users_api:
-    build: ./users-api
-    container_name: users_api
-    ports:
-      - "8080:8080"
-    environment:
-      - INIT_TABLES=
-      - DATABASE_URL=
-      - DB_NAME=
-      - APP_STAGE=
-      - S3_WORKER_API=
-    restart: always
-    depends_on:
-      - users_api_database
-    volumes:
-      - ./:/app
+x-environment: &default-environment
+  MINIO_ACCESS_KEY: v6COFScXBCIfZFsqYNH0
+  MINIO_SECRET_KEY: 9LMHiwoKXo5ekF7ovYBExDx4fifBj1ydzJam64on
+  MINIO_ROOT_USER: minioadmin
+  MINIO_ROOT_PASSWORD: minioadmin
 
+services:
   users_api_database:
     image: mongo:6.0.9
     restart: always
@@ -26,24 +15,13 @@ services:
     volumes:
       - mongodb_data_volume:/data/db
 
-  telegram_bot:
-    build: ./telegram-bot
-    container_name: telegram_bot
-    environment:
-      - TELEGRAM_BOT_TOKEN=
-      - API_URL=
-      - TEMP_STATIC_PATH=
-
   api_s3:
     build: ./s3-worker
     ports:
       - "8001:8001"
     environment:
-      - MINIO_ACCESS_KEY=
-      - MINIO_SECRET_KEY=
-      - MINIO_ENDPOINT_URL=
-      - MINIO_ROOT_USER=
-      - MINIO_ROOT_PASSWORD=
+      <<: [ *default-environment ]
+      MINIO_ENDPOINT_URL: http://host.docker.internal:9000
     restart: always
     volumes:
       - ./:/app
@@ -55,14 +33,12 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - MINIO_ACCESS_KEY=
-      - MINIO_SECRET_KEY=
-      - MINIO_ROOT_USER=
-      - MINIO_ROOT_PASSWORD=
+      <<: [ *default-environment ]
     volumes:
-      - ./s3-data:/data
+      - s3_data_volume:/data
 
 
 
 volumes:
   mongodb_data_volume:
+  s3_data_volume:

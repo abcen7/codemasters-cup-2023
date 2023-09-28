@@ -5,9 +5,7 @@ from typing import List, Dict
 
 
 def get_current_time_in_unix_format() -> float:
-    """
-    Get time in Unix
-    """
+    """Get time in Unix"""
     return time.mktime(datetime.now().timetuple())
 
 

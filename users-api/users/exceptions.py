@@ -14,3 +14,10 @@ class DocumentNotFound(HTTPException):
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND, detail="No document with this id"
         )
+
+
+class UserIsAlreadyExist(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT, detail="User with such telegram id already exist"
+        )
